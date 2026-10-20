@@ -371,14 +371,56 @@ $("#freins").addEventListener("change", () => {
   const coches = [...document.querySelectorAll("#freins input:checked")].map(i => i.value);
   $("#freinsHelp").innerHTML = coches.map(v => FREINS_TXT[v] ? `<p><b>${document.querySelector(`#freins input[value="${v}"]`).parentNode.textContent.trim()}</b><br>${FREINS_TXT[v]}</p>` : "").join("");
 });
-
+// Libellés lisibles pour l'enregistrement
+const LAB = {
+  mode:   { voiture: "Voiture", moto: "Deux-roues motorisé", velo: "Vélo" },
+  sexe:   { homme: "Homme", femme: "Femme", non_precise: "Non précisé" },
+  statut: { actif: "Actif(ve)", etudiant: "Étudiant(e)", retraite: "Retraité(e)" },
+  forme:  { oui: "Oui", non: "Non" },
+  vt: {
+    ok: "Pas de problème à vélo",
+    elec: "Uniquement vélo électrique",
+    peur: "Peur de circuler à vélo",
+    none: "Non concerné"
+  },
+  chg: {
+    travail: "Aller au travail / en cours à vélo",
+    pied: "Trajets quotidiens à pied",
+    transports: "Transports en commun",
+    courses: "Petites courses à vélo",
+    aucun: "Ne veut pas changer ses habitudes"
+  },
+  freins: {
+    securite: "Sécurité / peur du trafic",
+    amenagements: "Manque de pistes cyclables",
+    distance: "Distance",
+    meteo: "Météo",
+    forme: "Condition physique",
+    charges: "Enfants ou charges à transporter",
+    vestiaire: "Pas de douche ni de vestiaire",
+    stationnement: "Vol / absence de stationnement vélo",
+    cout: "Prix d'un bon vélo",
+    horaires: "Horaires contraints",
+    habitudes: "Habitudes et confort de la voiture"
+  }
+};
+const L = (cat, v) => (LAB[cat] && LAB[cat][v]) || v;
 const SESSION_ID = crypto.randomUUID ? crypto.randomUUID() : String(Math.random()).slice(2);
 function payload() {
   calc();
-  return { id: SESSION_ID,
+  const freins = [...document.querySelectorAll("#freins input:checked")].map(i => i.value);
+  return {
+    id: SESSION_ID,
     date: new Date().toISOString().slice(0, 10),
-    mode: val("mode"), sexe: val("sexe") || "non_precise", statut: val("statut"), forme: val("forme"),
-    ...last, freins: [...document.querySelectorAll("#freins input:checked")].map(i => i.value) };
+    ...last,
+    mode:   L("mode", val("mode")),
+    sexe:   L("sexe", val("sexe") || "non_precise"),
+    statut: L("statut", val("statut")),
+    forme:  L("forme", val("forme")),
+    vt:     L("vt", last.vt),
+    chg:    last.chg.map(v => L("chg", v)).join(" ; "),
+    freins: freins.map(v => L("freins", v)).join(" ; ")
+  };
 }
 
 // Enregistrement automatique : 3 s après la dernière modification, sauf si l’utilisateur refuse.
