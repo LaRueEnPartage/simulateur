@@ -148,6 +148,8 @@ const G = 150, CONSO_KM = 7 / 100, CONSO_H = 5, PRIX = 2.2, VEH = 1000 + 600 + 5
 const V_MUSC = 17, V_ELEC = 20, V_PIED = 5; // vitesses moyennes (km/h)
 const MOTO_G = 92, MOTO_L = 4; // hypothèses deux-roues motorisé
 const WEEKS = 45, EC_N = 3, EC_KM = 1.5, EC_WEEKS = 50, EC_V = 20;
+
+
 function fuel(km, hours) {
     if (km <= 0 || hours <= 0) return 0;
 
@@ -213,10 +215,22 @@ function calc() {
     : statut === "etudiant" ? "Au quotidien, pour aller à mon lieu d’études (trajet simple)"
     : "Au quotidien, pour aller à mon travail (trajet simple)";
 
+ 
   const ok = km > 0 && min > 0, vm = ok ? km / (min / 60) : 0;
+  const kmSem = km * 2 * j;
   const r = $("#react");
+    
   if (!ok) { r.className = "react r0"; r.textContent = "Indiquez la distance et le temps pour voir l’état de la circulation."; }
+  else if (isBike) {
+    r.className = "react r1";
+    r.textContent = `C’est super, tu roules ${fr(kmSem, 1)} km par semaine`;
+    if (vm > 20) r.textContent += `, d’autant plus que tu roules à bonne allure (${fr(vm)} km/h en moyenne)`;
+    else r.textContent += ` (${fr(vm)} km/h en moyenne)`;
+    r.textContent += ".";
+  }
   else {
+  // messages « circulation » inchangés pour voiture et deux-roues motorisé
+  if (vm >= 35) { r.className = "react r1"; r.textContent = "Ça roule plutôt bien."; }
     if (vm >= 35) { r.className = "react r1"; r.textContent = "Ça roule plutôt bien."; }
     else if (vm >= 20) { r.className = "react r2"; r.textContent = "Il y a du monde sur la route."; }
     else { r.className = "react r3"; r.textContent = "Oulala, c’est tout bouché !"; }
