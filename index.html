@@ -305,8 +305,9 @@ function calc() {
   // MODIF : changements — économies en € explicites (carburant vs abonnement), TC à 28 g/km, sans limite de distance
   let gSaved = 0, fuelSaved = 0, eurSaved = 0, aboInPlay = false;
   // MODIF : les alternatives de trajets quotidiens (vélo, pied, TC) partagent le même gain :
-  // si plusieurs sont cochées, le gain de chacune est pondéré (1/2 si 2, 1/3 si 3) pour éviter le cumul.
-  const alts = []; // MODIF : {g, f, e} de chaque alternative éligible
+  // si plusieurs sont cochées, le gain VARIABLE (CO₂, carburant) de chacune est pondéré (1/2 si 2, 1/3 si 3).
+  // L'abonnement TC est un coût fixe : il est compté en entier, une seule fois, sans pondération.
+  const alts = []; // MODIF : {g, f, e, abo} de chaque alternative éligible — abo = delta abonnement (non modulable)
  if (chg.includes("travail")) {
     const limit = vt === "elec" ? 20 : 8;
 
@@ -320,28 +321,37 @@ function calc() {
         }
 
         // Les économies sont comptabilisées même si la distance dépasse la limite indicative.
-        alts.push({ g: isTC ? kmAn * TC_G : kmAn * gm, f: fuelAn, e: isTC ? aboAn : fuelAn * PRIX }); // MODIF : en TC, le CO₂ évité est de 28 g/km et passer à vélo évite l'abonnement
+        alts.push({ g: isTC ? kmAn * TC_G : kmAn * gm, f: fuelAn, e: fuelAn * PRIX, abo: isTC ? aboAn : 0 }); // MODIF : en TC, le CO₂ évité est de 28 g/km et quitter le TC supprime l'abonnement (fixe)
     }
   }
   if (chg.includes("pied")) {
     if (km > 0 && km < 4) {
       // Trajets quotidiens à pied : pas de carburant, pas de CO₂ (ni d'abonnement si l'on était en TC)
-      alts.push({ g: isTC ? kmAn * TC_G : kmAn * gm, f: fuelAn, e: isTC ? aboAn : fuelAn * PRIX }); // MODIF : cohérence avec le mode TC actuel
+      alts.push({ g: isTC ? kmAn * TC_G : kmAn * gm, f: fuelAn, e: fuelAn * PRIX, abo: isTC ? aboAn : 0 }); // MODIF : cohérence avec le mode TC actuel
     }
   }
   if (chg.includes("transports")) {
     if (!isTC && !isBike) {                        // MODIF : sans limite de distance ; seulement depuis la voiture ou le deux-roues
-      // MODIF : CO₂ évité au-delà des 28 g/km du bus/tram ; économie nette du coût de l'abonnement
-      const net = fuelAn * PRIX - aboAn;          // MODIF : économie nette d'abonnement
-      if (net < 0) warns.push(`Attention : l’abonnement (${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois) coûte plus cher que le carburant économisé sur ces trajets.`); // MODIF : avertissement si abonnement > carburant économisé
-      alts.push({ g: kmAn * (gm - TC_G), f: fuelAn, e: Math.max(0, net) }); // MODIF : économie bornée à 0 €
+      // MODIF : CO₂ évité au-delà des 28 g/km du bus/tram ; l'abonnement est un coût fixe, déduit en entier
+      alts.push({ g: kmAn * (gm - TC_G), f: fuelAn, e: fuelAn * PRIX, abo: -aboAn }); // MODIF : abo négatif = coût d'abonnement ajouté (non partagé)
       aboInPlay = true;                           // MODIF : active le libellé « carburant et abonnement »
     }
   }
-  // MODIF : répartition du gain entre les alternatives cochées — 1 seule = gain entier, 2 = moitié, 3 = un tiers
+  // MODIF : répartition du gain VARIABLE entre les alternatives cochées — 1 seule = gain entier, 2 = moitié, 3 = un tiers
   const share = alts.length ? 1 / alts.length : 0; // MODIF : 1/2 si 2 alternatives, 1/3 si 3
-  alts.forEach(a => { gSaved += a.g * share; fuelSaved += a.f * share; eurSaved += a.e * share; }); // MODIF : chaque bilan est pondéré, plus de cumul ni de bilan négatif
-  if (alts.length > 1) warns.push(`${alts.length} modes de remplacement sont cochés pour les mêmes trajets : le gain est réparti à parts égales (${alts.length === 2 ? "moitié" : "un tiers"} chacun).`); // MODIF : information à l'utilisateur
+  alts.forEach(a => { gSaved += a.g * share; fuelSaved += a.f * share; eurSaved += a.e * share; }); // MODIF : chaque bilan variable est pondéré, plus de cumul ni de bilan négatif
+  // MODIF : abonnement fixe — compté une seule fois, en entier, jamais partagé :
+  const quittantTC = alts.some(a => a.abo > 0);    // MODIF : on quitte les TC → l'abonnement disparaît (économisé en entier)
+  const prenantTC  = alts.some(a => a.abo < 0);    // MODIF : on prend les TC → l'abonnement est dû en entier
+  if (quittantTC) eurSaved += aboAn;               // MODIF : économie d'abonnement pleine, même si réparti avec d'autres modes
+  if (prenantTC) {                                 // MODIF : coût d'abonnement plein, même en usage partiel
+    eurSaved -= aboAn;
+    if (eurSaved < 0) {
+      eurSaved = 0;                               // MODIF : économie bornée à 0 € (choix validé)
+      warns.push(`Attention : l’abonnement (${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois, coût fixe non modulable) coûte plus cher que le carburant économisé sur ces trajets.`);
+    } else if (share < 1) warns.push(`L’abonnement (${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois) est un coût fixe : il est déduit en entier même si les transports en commun ne sont qu'une partie de votre mix.`);
+  }
+  if (alts.length > 1) warns.push(`${alts.length} modes de remplacement sont cochés pour les mêmes trajets : le gain carburant/CO₂ est réparti à parts égales (${alts.length === 2 ? "moitié" : "un tiers"} chacun), l'abonnement éventuel reste compté en entier.`); // MODIF : information à l'utilisateur
   if (chg.includes("courses")) {
     // MODIF : la case « petites courses » retire simplement le forfait du bilan — pas d'ajout, donc pas de double comptage
     if (!hasCar) warns.push("Votre foyer n’a pas de voiture : les petits trajets en voiture ne sont pas comptés dans le bilan."); // MODIF : pas de voiture au foyer → forfait absent, rien à retirer
