@@ -348,8 +348,8 @@ function calc() {
     eurSaved -= aboAn;
     if (eurSaved < 0) {
       eurSaved = 0;                               // MODIF : économie bornée à 0 € (choix validé)
-      warns.push(`Attention : l’abonnement (${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois, coût fixe non modulable) coûte plus cher que le carburant économisé sur ces trajets.`);
-    } else if (share < 1) warns.push(`L’abonnement (${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois) est un coût fixe : il est déduit en entier même si les transports en commun ne sont qu'une partie de votre mix.`);
+      warns.push(`Attention : l’abonnement (${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois, coût fixe non modulable) coûte plus cher que le carburant économisé sur ces trajets. Vous pouvez bénéficier d'un abonnement salarié, plus économique si votre employeur vous le propose. De plus votre employeur a l'obligation légale de prendre en charge au moins 50% de l'abonnement.`);
+    } else if (share < 1) warns.push(`L’abonnement (${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois) est un coût fixe : il est déduit en entier même si les transports en commun ne sont qu'une partie de votre mix. Vous pouvez bénéficier d'un abonnement salarié, plus économique si votre employeur vous le propose. De plus votre employeur a l'obligation légale de prendre en charge au moins 50% de l'abonnement.`);
   }
   if (alts.length > 1) warns.push(`${alts.length} modes de remplacement sont cochés pour les mêmes trajets : le gain carburant/CO₂ est réparti à parts égales (${alts.length === 2 ? "moitié" : "un tiers"} chacun), l'abonnement éventuel reste compté en entier.`); // MODIF : information à l'utilisateur
   if (chg.includes("courses")) {
