@@ -25,10 +25,6 @@ h2{font-size:1.25rem;margin:0 0 14px}
 .opts label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
 .opts label:has(input:checked){background:var(--acc2);border-color:var(--acc)}
 .opts.col{flex-direction:column}.opts.col label{border-radius:10px}
-.select{display:flex;flex-wrap:wrap;gap:8px}
-.select label{display:flex;align-items:center;gap:6px;border:1px solid var(--line);border-radius:999px;padding:6px 14px;cursor:pointer}
-.select label:has(input:checked){background:var(--acc2);border-color:var(--acc)}
-.select.col{flex-direction:column}.select.col label{border-radius:10px}  
 input[type=number]{width:90px;font:inherit;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink)}
 input:focus-visible,button:focus-visible{outline:3px solid var(--acc);outline-offset:2px}
 .row{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
@@ -69,15 +65,6 @@ details{margin-top:12px;color:var(--mut);font-size:.9rem}
 <div class="q"><span class="lb">Je suis</span><div class="opts"><label><input type="radio" name="statut" value="actif" checked>actif(ve)</label><label><input type="radio" name="statut" value="etudiant">étudiant(e)</label><label><input type="radio" name="statut" value="retraite">retraité(e)</label></div></div>
 <div class="q"><span class="lb">Pour aller à mon travail ou à mon lieu d’études, j’utilise le plus souvent</span><div class="opts"><label><input type="radio" name="mode" value="voiture" checked>la voiture</label><label><input type="radio" name="mode" value="moto">un deux-roues motorisé</label><label><input type="radio" name="mode" value="TC">Les transports en commun</label><label><input type="radio" name="mode" value="velo">le vélo</label></div></div>
 <div class="q"><span class="lb">J'habite:</span><div class="opts"><label><input type="radio" name="ville" value="33185" checked>Le Haillan</label><label><input type="radio" name="mode" value="33700">Mérignac</label><label><input type="radio" name="mode" value="33320">Eysines</label><label><input type="radio" name="mode" value="33000">Ailleurs dans la métropole de Bordeaux</label><label><input type="radio" name="mode" value="99999">Hors métropole de Bordeaux</label></div></div>
-<div class="q"><span class="select">J'habite:</span><select name="ville2" id="ville2">
-  <option value="">--Commune--</option>
-  <option value="33185">Le Haillan</option>
-  <option value="33320">Eysines</option>
-  <option value="33700">Merignac</option>    
-  <option value="33160">Saint Médard en Jalles</option>
-  <option value="parrot">Autre commune de Bordeaux métropole</option>
-  <option value="spider">Commune hors Bordeaux métropole</option>
-</select></div></div>
 <div class="q"><label for="nv">Dans mon foyer, il y a <input type="number" id="nv" min="0" max="6" value="1" style="width:70px"> voiture(s)</label></div>
 <div class="q" id="qtrajet">
 <span class="lb" id="labTravail">Au quotidien, pour aller à mon travail ou à mon lieu d’études (trajet simple)</span>
