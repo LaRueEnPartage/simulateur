@@ -163,7 +163,8 @@ const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9Q-GqlKttcAyE9Tuw44A
 // ===========================
 
 const $ = s => document.querySelector(s);
-const val = n => (document.querySelector(`input[name=${n}]:checked`) || {}).value || "";
+const val  = n => (document.querySelector(`input[name=${n}]:checked`) || {}).value || ""; // radios
+const sval = id => document.querySelector("#" + id).value;                                  // selects
 const num = (id, d) => { const v = parseFloat($(id).value); return isFinite(v) && v >= 0 ? v : d; };
 const fr = (n, d = 0) => n.toLocaleString("fr-FR", { maximumFractionDigits: d });
 const G = 150, CONSO_KM = 7 / 100, CONSO_H = 5, PRIX = 2.2, VEH = 1000 + 600 + 500;
@@ -436,10 +437,10 @@ function payload() {
     id: SESSION_ID,
     date: new Date().toISOString().slice(0, 10),
     ...last,
-    age:    L("age", val("age")),
+    age:    L("age", sval("age")),
     mode:   L("mode", val("mode")),
     sexe:   L("sexe", val("sexe") || "non_precise"),
-    ville:    L("ville", val("ville") || "non_précise"),  
+    ville:    L("ville", sval("ville") || "non_précise"),  
     statut: L("statut", val("statut")),
     forme:  L("forme", val("forme")),
     vt:     L("vt", last.vt),  
