@@ -66,6 +66,15 @@ details{margin-top:12px;color:var(--mut);font-size:.9rem}
 <section aria-labelledby="a"><h2 id="a">A – Ma situation</h2>
 <div class="q"><span class="lb">Je suis</span><div class="opts" id="sexe"><label><input type="radio" name="sexe" value="homme">un homme</label><label><input type="radio" name="sexe" value="femme">une femme</label></div></div>
 <div class="q"><span class="lb">Je suis</span><div class="opts"><label><input type="radio" name="statut" value="actif" checked>actif(ve)</label><label><input type="radio" name="statut" value="etudiant">étudiant(e)</label><label><input type="radio" name="statut" value="retraite">retraité(e)</label></div></div>
+<div class="q"><span class="lb">Ma tranche d'age:</span>
+<select name="age" id="age" class="select">
+  <option value="non renseigné">   -   </option>
+  <option value="33185" >moins de 18 ans</option>
+  <option value="33320" >18 - 30 ans </option>
+  <option value="33700" >30 - 50 ans</option>    
+  <option value="33160" >50 - 65 ans</option>
+  <option value="parrot" > plus de 65 ans</option></select>
+</div>
 <div class="q"><span class="lb">Pour aller à mon travail ou à mon lieu d’études, j’utilise le plus souvent</span><div class="opts"><label><input type="radio" name="mode" value="voiture" checked>la voiture</label><label><input type="radio" name="mode" value="moto">un deux-roues motorisé</label><label><input type="radio" name="mode" value="TC">Les transports en commun</label><label><input type="radio" name="mode" value="velo">le vélo</label></div></div>
 <div class="q"><span class="lb">J'habite:</span>
 <select name="ville" id="ville" class="select">
@@ -426,6 +435,7 @@ function payload() {
     id: SESSION_ID,
     date: new Date().toISOString().slice(0, 10),
     ...last,
+    age:    L("age", val("age")),
     mode:   L("mode", val("mode")),
     sexe:   L("sexe", val("sexe") || "non_precise"),
     ville:    L("ville", val("ville") || "non_précise"),  
