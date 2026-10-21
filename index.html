@@ -67,13 +67,13 @@ details{margin-top:12px;color:var(--mut);font-size:.9rem}
 <div class="q"><span class="lb">Je suis</span><div class="opts" id="sexe"><label><input type="radio" name="sexe" value="homme">un homme</label><label><input type="radio" name="sexe" value="femme">une femme</label></div></div>
 <div class="q"><span class="lb">Je suis</span><div class="opts"><label><input type="radio" name="statut" value="actif" checked>actif(ve)</label><label><input type="radio" name="statut" value="etudiant">étudiant(e)</label><label><input type="radio" name="statut" value="retraite">retraité(e)</label></div></div>
 <div class="q"><span class="lb">Ma tranche d'age:</span>
+<!-- MODIF : nouvelles tranches d'âge (-18, 18-27, 28-59, 60+) -->
 <select name="age" id="age" class="select">
   <option value="non_renseigne">   -   </option>
-  <option value="18" >moins de 18 ans</option>
-  <option value="1830" >18 - 30 ans </option>
-  <option value="3050" >30 - 50 ans</option>    
-  <option value="5065" >50 - 65 ans</option>
-  <option value="65" > plus de 65 ans</option></select>
+  <option value="m18">moins de 18 ans</option>
+  <option value="1827">18 - 27 ans</option>
+  <option value="2859">28 - 59 ans</option>
+  <option value="60">plus de 60 ans</option></select>
 </div>
 <div class="q"><span class="lb">Pour aller à mon travail ou à mon lieu d’études, j’utilise le plus souvent</span><div class="opts"><label><input type="radio" name="mode" value="voiture" checked>la voiture</label><label><input type="radio" name="mode" value="moto">un deux-roues motorisé</label><label><input type="radio" name="mode" value="TC">Les transports en commun</label><label><input type="radio" name="mode" value="velo">le vélo</label></div></div>
 <div class="q"><span class="lb">J'habite:</span>
@@ -113,15 +113,16 @@ details{margin-top:12px;color:var(--mut);font-size:.9rem}
 <div class="q" id="opt-abandon" style="margin-top:14px"><div class="opts"><label><input type="checkbox" id="abandon">J’envisage de me passer d’une voiture du foyer</label></div></div>
 </section>
 
-<section aria-labelledby="c" aria-live="polite"><h2 id="c">C – Ce que ça change pour moi</h2>
+<section aria-labelledby="c" aria-live="polite"><h2 id="c">Ce que ça change pour moi</h2>
 <div class="big">
 <div class="k"><b id="o-co2">0</b><span>kg de CO₂ évités par an</span></div>
 <div class="k"><b id="o-fuel">0</b><span>litres de carburant en moins</span></div>
 <div class="k"><b id="o-eur">0 €</b><span>économisés par an au total</span></div></div>
-<div class="bar"><div class="t"><span>CO₂ lié à mes trajets quotidiens</span><span id="t-co2"></span></div><div class="track"><div class="fill" id="f-co2"></div></div></div>
-<div class="bar"><div class="t"><span>Budget carburant</span><span id="t-eur"></span></div><div class="track"><div class="fill" id="f-eur"></div></div></div>
+<!-- MODIF : id lab-co2 / lab-budget pour des libellés dynamiques (carburant / abonnement / mix) -->
+<div class="bar"><div class="t"><span id="lab-co2">CO₂ lié à mes trajets quotidiens</span><span id="t-co2"></span></div><div class="track"><div class="fill" id="f-co2"></div></div></div>
+<div class="bar"><div class="t"><span id="lab-budget">Budget carburant</span><span id="t-eur"></span></div><div class="track"><div class="fill" id="f-eur"></div></div></div>
 <h3 style="font-size:1.05rem;margin:22px 0 4px">Combien de temps à vélo ?</h3>
-<p class="note" style="margin:0 0 6px">Trajet simple de <span id="tk"></span> km. Vitesse moyenne : 5 km/h à pied, 12 km/h en vélo musculaire, 19 km/h en vélo électrique.</p>
+<p class="note" style="margin:0 0 6px">Trajet simple de <span id="tk"></span> km. Vitesse moyenne : 5 km/h à pied, 17 km/h en vélo musculaire, 20 km/h en vélo électrique.</p>
 <div id="tps"></div>
 <p id="tpsmsg" class="note"></p>
 <h3 style="font-size:1.05rem;margin:22px 0 4px">Et pour ma santé ?</h3>
@@ -131,8 +132,9 @@ details{margin-top:12px;color:var(--mut);font-size:.9rem}
 <li>Vélo électrique : <a href="https://www.cleanrider.com/actus/faire-du-velo-electrique-cest-aussi-la-sante/" target="_blank" rel="noopener">étude suivant environ 1 800 cyclistes allemands</a> (temps de pédalage plus court qu’à vélo musculaire, mais mobilité active facilitée, notamment pour les personnes âgées) et <a href="https://www.cleanrider.com/actus/velo-electrique-sante-mode-assistance/" target="_blank" rel="noopener">étude néerlandaise sur l’effort selon le mode d’assistance</a>. Ces deux liens sont des articles de presse qui relaient les études ; consultez les publications d’origine avant de les citer.</li></ul>
 <p>Information générale, non médicale : en cas de problème de santé, demandez conseil à un médecin.</p></details>
 <p id="detail" class="note"></p><p id="warn" class="note" style="color:var(--warn)"></p>
-<details><summary>Hypothèses de calcul</summary><p>150 g de CO₂/km. Consommation : 6.5l/100km à 80km/h elle augmente progressivement dans les bouchons, jusqu'à 14L/100km (en dessous de 5 km/h). Carburant : 2,2 €/L. Voiture : amortissement 1 000 €/an, assurance 600 €/an, entretien et usure 500 €/an (2 100 €/an). 45 semaines travaillées par an. Petites courses : 3 par semaine, 1,5 km aller simple, 50 semaines, vitesse en ville 20 km/h. Vélo classique jusqu’à 8 km aller simple, vélo électrique jusqu’à 20 km. Deux-roues motorisé : 6 L/100 km et 124 g de CO₂/km ; pas d’option d’abandon de véhicule pour le deux-roues. Vitesses moyennes à vélo, arrêts et feux compris : 17 km/h en vélo musculaire, 20 km/h en vélo électrique. Marche : 5 km/h. Le coût d’achat et d’entretien du vélo n’est pas déduit.</p>
-<p>Retraités : la question des trajets porte sur vos déplacements quotidiens ; la distance, la fréquence par semaine et la durée vous sont demandées pour affiner l’analyse. Transports en commun : 70 % du CO₂ évité et 80 % du budget carburant économisé. Marche : 5 km/h, sans CO₂ ni carburant.</p></details>
+<details><summary>Hypothèses de calcul</summary><p>150 g de CO₂/km. Consommation : 6.5l/100km à 80km/h elle augmente progressivement dans les bouchons, jusqu'à 14L/100km (en dessous de 5 km/h). Carburant : 2,2 €/L. Voiture : amortissement 1 000 €/an, assurance 600 €/an, entretien et usure 500 €/an (2 100 €/an). 45 semaines travaillées par an. Petits trajets du quotidien : 3 allers-retours par semaine, 2 km l’aller simple, 50 semaines, vitesse en ville 20 km/h. Vélo classique jusqu’à 8 km aller simple, vélo électrique jusqu’à 20 km. Deux-roues motorisé : 6 L/100 km et 124 g de CO₂/km ; pas d’option d’abandon de véhicule pour le deux-roues. Vitesses moyennes à vélo, arrêts et feux compris : 17 km/h en vélo musculaire, 20 km/h en vélo électrique. Marche : 5 km/h. Le coût d’achat et d’entretien du vélo n’est pas déduit.</p>
+<!-- MODIF : hypothèses TC mises à jour (28 g CO₂/km, tarifs d'abonnement par âge, économie nette d'abonnement, petits déplacements dans le bilan) -->
+<p>Retraités : la question des trajets porte sur vos déplacements quotidiens ; la distance, la fréquence par semaine et la durée vous sont demandées pour affiner l’analyse. Transports en commun : 28 g de CO₂/km ; abonnement mensuel de 21,40 € avant 28 ans, 45,80 € de 28 à 59 ans et 33 € à partir de 60 ans (compté 12 mois par an) ; l’économie d’un passage aux transports en commun est calculée nette du coût de l’abonnement. Petits trajets du quotidien (pain, journal…) : forfait de 3 allers-retours par semaine à 2 km l’aller simple (50 semaines, vitesse en ville 20 km/h), ajouté au bilan uniquement s’il y a une voiture au foyer ; cocher « petites courses à vélo » retire ce forfait du bilan. Marche : 5 km/h, sans CO₂ ni carburant.</p></details>
 </section>
 
 <section aria-labelledby="d"><h2 id="d">Qu’est-ce qui me freinerait ?</h2>
@@ -164,13 +166,17 @@ const ENDPOINT = "https://script.google.com/macros/s/AKfycbx9Q-GqlKttcAyE9Tuw44A
 
 const $ = s => document.querySelector(s);
 const val  = n => (document.querySelector(`input[name=${n}]:checked`) || {}).value || ""; // radios
-const sval = id => document.querySelector("#" + id).value;                                  // selects
+const sval = id => document.querySelector("#" + id).value;                                  // MODIF : lecture des <select> (âge, commune)
 const num = (id, d) => { const v = parseFloat($(id).value); return isFinite(v) && v >= 0 ? v : d; };
 const fr = (n, d = 0) => n.toLocaleString("fr-FR", { maximumFractionDigits: d });
 const G = 150, CONSO_KM = 7 / 100, CONSO_H = 5, PRIX = 2.2, VEH = 1000 + 600 + 500;
 const V_MUSC = 17, V_ELEC = 20, V_PIED = 5; // vitesses moyennes (km/h)
 const MOTO_G = 124, MOTO_L = 6; // hypothèses deux-roues motorisé
-const WEEKS = 45, EC_N = 3, EC_KM = 1.5, EC_WEEKS = 50, EC_V = 20;
+// MODIF : transports en commun — 28 g de CO₂/km et abonnement mensuel selon la tranche d'âge
+const TC_G = 28;
+// MODIF : abonnement TC mensuel (21,40 € avant 28 ans, 45,80 € de 28 à 59 ans, 33 € à partir de 60 ans ; 45,80 € si âge non renseigné)
+const ABO_MOIS = a => (a === "m18" || a === "1827") ? 21.4 : a === "60" ? 33 : 45.8;
+const WEEKS = 45, EC_N = 3, EC_KM = 2, EC_WEEKS = 50, EC_V = 20; // MODIF : petits trajets = 3 a/r par semaine, 2 km aller simple
 
 
 function fuel(km, hours) {
@@ -252,9 +258,8 @@ function calc() {
     r.textContent += ".";
   }
   else {
-  // messages « circulation » inchangés pour voiture et deux-roues motorisé
-  if (vm >= 35) { r.className = "react r1"; r.textContent = "Ça roule plutôt bien."; }
-    if (vm >= 35) { r.className = "react r1"; r.textContent = "Ça roule plutôt bien."; }
+  // messages « circulation » pour voiture et deux-roues motorisé
+  if (vm >= 35) { r.className = "react r1"; r.textContent = "Ça roule plutôt bien."; } // MODIF : doublon supprimé
     else if (vm >= 20) { r.className = "react r2"; r.textContent = "Il y a du monde sur la route."; }
     else { r.className = "react r3"; r.textContent = "Oulala, c’est tout bouché !"; }
     r.textContent += ` (vitesse moyenne : ${fr(vm)} km/h)`;
@@ -263,17 +268,18 @@ function calc() {
   // Alerte « à pied » pour les très courtes distances
   $("#alertePied").classList.toggle("hide", !(km > 0 && km <= 2));
 
-  const vol = mode === "voiture" ? "au volant" : mode === "moto" ? "en deux-roues motorisé" : "à vélo";
+  const vol = mode === "voiture" ? "au volant" : mode === "moto" ? "en deux-roues motorisé" : mode === "TC" ? "dans les transports en commun" : "à vélo"; // MODIF : cas TC géré
   const gm = mode === "moto" ? MOTO_G : G;
   $("#qforme").classList.toggle("hide", isBike);
   $("#qnow").classList.toggle("hide", !isBike);
   $("#opt-travail").classList.toggle("hide", isBike || retraite);
   $("#lblTravailVelo").textContent = statut === "etudiant" ? "Aller en cours en vélo" : "Aller à mon travail en vélo";
   $("#opt-pied").classList.toggle("hide", !(km > 0 && km < 4));
-  $("#opt-transports").classList.toggle("hide", !(km > 0 && km < 4));
+  $("#opt-transports").classList.toggle("hide", !(km > 0)); // MODIF : option TC débridée (plus de limite à 4 km)
   $("#opt-abandon").classList.toggle("hide", mode !== "voiture");
   if (isBike || retraite) document.querySelector("#opt-travail input").checked = false;
-  if (km <= 0 || km >= 4) { document.querySelector("#opt-pied input").checked = false; document.querySelector("#opt-transports input").checked = false; }
+  if (km <= 0 || km >= 4) { document.querySelector("#opt-pied input").checked = false; }
+  if (km <= 0) { document.querySelector("#opt-transports input").checked = false; } // MODIF : ne se décoche que si km = 0
   if (mode !== "voiture") $("#abandon").checked = false;
   const fit = isBike ? true : val("forme") === "oui";
   $("#velo").classList.toggle("hide", isBike || !fit);
@@ -281,13 +287,26 @@ function calc() {
   const chg = [...document.querySelectorAll("#chg input:checked")].map(i => i.value);
   const warns = [];
 
-  // Situation actuelle (aller-retour, annuel)
+  // MODIF : situation actuelle — baseline refondue (mode TC, abonnement selon l'âge, petits déplacements inclus pour voiture/moto)
   const kmAn = km * 2 * j * WEEKS, hAn = (min / 60) * 2 * j * WEEKS;
-  const fuelAn = isBike ? 0 : mode === "moto" ? kmAn * MOTO_L / 100 : fuel(km * 2, 2 * min / 60) * j * WEEKS;
-  const co2Now = isBike ? 0 : kmAn * gm / 1000, eurNow = fuelAn * PRIX;
+  const ageV = sval("age");                       // MODIF : tranche d'âge lue via le select
+  const aboAn = 12 * ABO_MOIS(ageV);               // MODIF : coût annuel de l'abonnement TC selon l'âge
+  const isTC = mode === "TC";                      // MODIF : mode TC comme situation actuelle
+  const hasMotor = mode === "voiture" || mode === "moto"; // MODIF : modes avec carburant
+  // MODIF : forfait petits trajets en voiture (pain, journal…) — comptés uniquement s'il y a une voiture au foyer
+  const hasCar = cars >= 1;                        // MODIF : présence d'une voiture au foyer
+  const ecKm = hasCar ? EC_N * EC_KM * 2 * EC_WEEKS : 0; // MODIF : 3 a/r par semaine, 2 km aller simple, 50 semaines
+  const ecFuel = (ecKm / EC_V) * CONSO_H;          // MODIF : carburant de ces petits trajets, en voiture (vitesse ville 20 km/h)
+  const fuelAn = isBike || isTC ? 0 : mode === "moto" ? kmAn * MOTO_L / 100 : fuel(km * 2, 2 * min / 60) * j * WEEKS; // MODIF : pas de carburant en TC
+  const co2Now = isBike ? 0 : isTC ? (kmAn * TC_G + ecKm * G) / 1000              // MODIF : TC = 28 g/km + forfait petits trajets voiture si voiture au foyer
+    : (kmAn * gm + ecKm * G) / 1000;                                              // MODIF : forfait petits trajets voiture ajouté, quel que soit le mode
+  const eurNow = isBike ? 0 : isTC ? aboAn + ecFuel * PRIX : fuelAn * PRIX + ecFuel * PRIX; // MODIF : abonnement fixe en TC + forfait petits trajets voiture si applicable
 
-  // Changements
-  let gSaved = 0, fuelSaved = 0;
+  // MODIF : changements — économies en € explicites (carburant vs abonnement), TC à 28 g/km, sans limite de distance
+  let gSaved = 0, fuelSaved = 0, eurSaved = 0, aboInPlay = false;
+  // MODIF : les alternatives de trajets quotidiens (vélo, pied, TC) partagent le même gain :
+  // si plusieurs sont cochées, le gain de chacune est pondéré (1/2 si 2, 1/3 si 3) pour éviter le cumul.
+  const alts = []; // MODIF : {g, f, e} de chaque alternative éligible
  if (chg.includes("travail")) {
     const limit = vt === "elec" ? 20 : 8;
 
@@ -301,29 +320,35 @@ function calc() {
         }
 
         // Les économies sont comptabilisées même si la distance dépasse la limite indicative.
-        gSaved += kmAn * gm;
-        fuelSaved += fuelAn;
+        alts.push({ g: isTC ? kmAn * TC_G : kmAn * gm, f: fuelAn, e: isTC ? aboAn : fuelAn * PRIX }); // MODIF : en TC, le CO₂ évité est de 28 g/km et passer à vélo évite l'abonnement
     }
   }
   if (chg.includes("pied")) {
     if (km > 0 && km < 4) {
-      // Trajets quotidiens à pied : pas de carburant, pas de CO₂
-      gSaved += kmAn * gm;
-      fuelSaved += fuelAn;
+      // Trajets quotidiens à pied : pas de carburant, pas de CO₂ (ni d'abonnement si l'on était en TC)
+      alts.push({ g: isTC ? kmAn * TC_G : kmAn * gm, f: fuelAn, e: isTC ? aboAn : fuelAn * PRIX }); // MODIF : cohérence avec le mode TC actuel
     }
   }
   if (chg.includes("transports")) {
-    if (km > 0 && km < 4) {
-      // Hypothèse simplifiée : 70 % du CO₂ et 80 % du carburant évités
-      gSaved += kmAn * gm * 0.7;
-      fuelSaved += fuelAn * 0.8;
+    if (!isTC && !isBike) {                        // MODIF : sans limite de distance ; seulement depuis la voiture ou le deux-roues
+      // MODIF : CO₂ évité au-delà des 28 g/km du bus/tram ; économie nette du coût de l'abonnement
+      const net = fuelAn * PRIX - aboAn;          // MODIF : économie nette d'abonnement
+      if (net < 0) warns.push(`Attention : l’abonnement (${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois) coûte plus cher que le carburant économisé sur ces trajets.`); // MODIF : avertissement si abonnement > carburant économisé
+      alts.push({ g: kmAn * (gm - TC_G), f: fuelAn, e: Math.max(0, net) }); // MODIF : économie bornée à 0 €
+      aboInPlay = true;                           // MODIF : active le libellé « carburant et abonnement »
     }
   }
+  // MODIF : répartition du gain entre les alternatives cochées — 1 seule = gain entier, 2 = moitié, 3 = un tiers
+  const share = alts.length ? 1 / alts.length : 0; // MODIF : 1/2 si 2 alternatives, 1/3 si 3
+  alts.forEach(a => { gSaved += a.g * share; fuelSaved += a.f * share; eurSaved += a.e * share; }); // MODIF : chaque bilan est pondéré, plus de cumul ni de bilan négatif
+  if (alts.length > 1) warns.push(`${alts.length} modes de remplacement sont cochés pour les mêmes trajets : le gain est réparti à parts égales (${alts.length === 2 ? "moitié" : "un tiers"} chacun).`); // MODIF : information à l'utilisateur
   if (chg.includes("courses")) {
-    if (!fit || vt === "peur") warns.push("Les petites courses à vélo ne sont pas comptées (forme ou peur du vélo).");
-    else { const k = EC_N * EC_KM * 2 * EC_WEEKS; gSaved += k * (mode === "moto" ? MOTO_G : G); fuelSaved += mode === "moto" ? k * MOTO_L / 100 : (k / EC_V) * CONSO_H; }
+    // MODIF : la case « petites courses » retire simplement le forfait du bilan — pas d'ajout, donc pas de double comptage
+    if (!hasCar) warns.push("Votre foyer n’a pas de voiture : les petits trajets en voiture ne sont pas comptés dans le bilan."); // MODIF : pas de voiture au foyer → forfait absent, rien à retirer
+    else if (!fit || vt === "peur") warns.push("Les petites courses à vélo ne sont pas comptées (forme ou peur du vélo).");
+    else { gSaved += ecKm * G; fuelSaved += ecFuel; eurSaved += ecFuel * PRIX; } // MODIF : économie = le forfait voiture retiré (CO₂ 150 g/km, carburant ville)
   }
-  const co2Saved = gSaved / 1000, eurFuel = fuelSaved * PRIX;
+  const co2Saved = gSaved / 1000, eurFuel = eurSaved; // MODIF : économie en € pilotée par eurSaved (carburant ou abonnement)
   let eurVeh = 0;
   if ($("#abandon").checked) {
     if (cars >= 1) { eurVeh = VEH; if (cars === 1) warns.push("Avec une seule voiture, s’en passer suppose d’autres alternatives (transports, autopartage, location)."); }
@@ -331,6 +356,14 @@ function calc() {
   }
   const eurTotal = eurFuel + eurVeh;
 
+  // MODIF : libellés dynamiques du budget (carburant / abonnement / mix) avec tarif mensuel affiché
+  const aboTxt = `${ABO_MOIS(ageV).toFixed(2).replace(".", ",")} €/mois`;
+  let labBud = "Budget carburant";
+  if (isTC) labBud = "Budget annuel abonnement";                 // MODIF : mode TC → budget abonnement
+  else if (aboInPlay) labBud = "Budget annuel carburant et abonnement"; // MODIF : mix carburant + abonnement
+  if (labBud.includes("abonnement")) labBud += ` (${aboTxt})`;    // MODIF : ajout du tarif mensuel entre parenthèses
+  $("#lab-budget").textContent = labBud;
+  $("#lab-co2").textContent = hasCar ? "CO₂ de mes trajets et petits trajets en voiture" : "CO₂ lié à mes trajets quotidiens"; // MODIF : libellé CO₂ élargi si forfait petits trajets compté
   $("#o-co2").textContent = fr(co2Saved);
   $("#o-fuel").textContent = fr(fuelSaved);
   $("#o-eur").textContent = fr(eurTotal) + " €";
@@ -339,11 +372,12 @@ function calc() {
   $("#f-co2").style.width = pc + "%"; $("#f-eur").style.width = pe + "%";
   $("#t-co2").textContent = `${fr(co2Now)} → ${fr(co2Now - co2Saved)} kg/an`;
   $("#t-eur").textContent = `${fr(eurNow)} → ${fr(eurNow - eurFuel)} €/an`;
-  $("#detail").textContent = `Aujourd’hui : ${fr(kmAn)} km/an et ${fr(hAn)} h ${vol} pour vos trajets quotidiens. Économies : ${fr(eurFuel)} € de carburant` + (eurVeh ? ` + ${fr(eurVeh)} € de coûts de véhicule évités.` : ".");
+  const ecoWord = isTC ? "d’abonnement" : aboInPlay ? "de carburant et d’abonnement" : "de carburant"; // MODIF : wording de l'économie selon le contexte
+  $("#detail").textContent = `Aujourd’hui : ${fr(kmAn)} km/an et ${fr(hAn)} h ${vol} pour vos trajets quotidiens. Économies : ${fr(eurFuel)} € ${ecoWord}` + (eurVeh ? ` + ${fr(eurVeh)} € de coûts de véhicule évités.` : ".");
   $("#warn").textContent = warns.join(" ");
 
   // Simulateur de temps : trajet actuel vs vélo musculaire vs vélo électrique vs à pied
-  const lab0 = isBike ? "Mon trajet actuel à vélo" : mode === "voiture" ? "Voiture" : "Deux-roues motorisé";
+  const lab0 = isBike ? "Mon trajet actuel à vélo" : mode === "voiture" ? "Voiture" : mode === "moto" ? "Deux-roues motorisé" : mode === "TC" ? "Transports en commun" : "Mon trajet actuel"; // MODIF : cas TC géré
   const tM = km / V_MUSC * 60, tE = km / V_ELEC * 60, tP = km / V_PIED * 60;
   const rows = [[lab0, min, 0], ["Vélo musculaire", tM, 1], ["Vélo électrique", tE, 1], ["À pied", tP, 2]];
   const mx = Math.max(min, tM, tE, tP, 1);
@@ -373,7 +407,7 @@ function calc() {
     `L’OMS recommande aux adultes 150 à 300 minutes d’activité d’endurance d’intensité modérée par semaine, et rappelle que se déplacer à vélo compte. Toute activité vaut mieux que l’inactivité.</p>` +
     `<p class="${vt === "elec" ? "me" : ""}"><b>Vélo électrique.</b> ` + (has ? `Ces trajets représenteraient environ ${fr(wE)} min par semaine : ${niv(wE)}. ` : "") +
     `Même avec assistance, l’effort reste d’intensité modérée selon plusieurs études, mais on pédale souvent moins longtemps qu’à vélo musculaire. Il aide surtout à rester ou à redevenir actif, notamment avec l’âge ou après une longue pause.</p>`;
-  if (chg.includes("transports") && km > 0 && km < 4) {
+  if (chg.includes("transports") && km > 0) { // MODIF : paragraphe santé TC affiché sans limite de distance
     sante += `<p><b>Transports en commun.</b> Se rendre à un arrêt à pied et combiner la marche aux trajets en bus contribue aussi à l’activité physique quotidienne recommandée par l’OMS, tout en réduisant fortement le CO₂ de vos déplacements.</p>`;
   }
   $("#sante").innerHTML = sante;
@@ -396,8 +430,11 @@ $("#freins").addEventListener("change", () => {
 });
 // Libellés lisibles pour l'enregistrement
 const LAB = {
-  age:   {non_renseigne:"non renseigné", 18: "-18", 1830: "18-30", 3050: "30-50", 5065: "50-65", 65: "+65" },
-  mode:   { voiture: "Voiture", moto: "Deux-roues motorisé", velo: "Vélo" },
+  // MODIF : tranches d'âge mises à jour
+  age:   { non_renseigne: "non renseigné", m18: "-18 ans", 1827: "18-27 ans", 2859: "28-59 ans", 60: "60 ans et +" },
+  // MODIF : TC ajouté au mode, communes ajoutées
+  mode:   { voiture: "Voiture", moto: "Deux-roues motorisé", TC: "Transports en commun", velo: "Vélo" },
+  ville:  { "non renseigné": "Non renseignée", 33185: "Le Haillan", 33320: "Eysines", 33700: "Mérignac", 33160: "Saint-Médard-en-Jalles", parrot: "Autre commune de Bordeaux Métropole", spider: "Commune hors Bordeaux Métropole" },
   sexe:   { homme: "Homme", femme: "Femme", non_precise: "Non précisé" },
   statut: { actif: "Actif(ve)", etudiant: "Étudiant(e)", retraite: "Retraité(e)" },
   forme:  { oui: "Oui", non: "Non" },
@@ -437,13 +474,14 @@ function payload() {
     id: SESSION_ID,
     date: new Date().toISOString().slice(0, 10),
     ...last,
+    abonnement_TC_eur_mois: ABO_MOIS(sval("age")), // MODIF : tarif d'abonnement TC envoyé avec les réponses
     age:    L("age", sval("age")),
     mode:   L("mode", val("mode")),
     sexe:   L("sexe", val("sexe") || "non_precise"),
-    ville:    L("ville", sval("ville") || "non_précise"),  
+    ville:  L("ville", sval("ville") || "non_précise"),
     statut: L("statut", val("statut")),
     forme:  L("forme", val("forme")),
-    vt:     L("vt", last.vt),  
+    vt:     L("vt", last.vt),
     chg:    last.chg.map(v => L("chg", v)).join(" ; "),
     freins: freins.map(v => L("freins", v)).join(" ; ")
   };
